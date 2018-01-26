@@ -19,6 +19,7 @@ def matching_string(str1, str2)
         if str2[i+k] == str1[k]
           if k == str1.length - 1
             match = true
+            break
           end
           next
         else
