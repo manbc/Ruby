@@ -1,3 +1,5 @@
+require "test/unit/assertions.rb"
+include Test::Unit::Assertions
 def most_frequent_int(arr)
   int_counter = Hash.new(0)
   arr.each { |x|
@@ -198,11 +200,12 @@ arr5 = [1,5,3,6,8,9,11,2]
 
 puts intersection_no_sort(arr4, arr5).to_s
 =end
-=begin
+
 arr = [1,3,5,7,9]
 arr2 = [0,1,2,3,4,5]
+=begin
 def binary_search(arr, x)
-  arr.sort
+  #arr.sort
   max = arr.length - 1
   min = 0
   mid = arr.length/2
@@ -222,8 +225,90 @@ end
 puts binary_search(arr2, 4)
 =end
 
-def binary_search_rotated(arr, x)
-  #find the rotated element index
-
+def binary_search_recursive(arr, key, min, max)
+  if (min > max)
+    return
+  end
+  #puts "MAX = #{max}"
+  #puts "MIN = #{min}"
+  #puts "KEY = #{key}"
+  mid = (max + min) / 2
+  if arr[mid] == key
+    return mid
+  elsif arr[mid] > key
+   return binary_search_recursive(arr, key, min, mid-1)
+  else
+   return binary_search_recursive(arr, key, mid+1, max)
+  end
 end
+
+#puts "binary search for 7 on: #{arr.to_s}"
+#puts binary_search_recursive(arr, 3, 0, arr.length-1)
+
+def binary_search_rotated(arr, key, min, max)
+  #find pivot
+  pivot = -1
+  for i in 0...arr.length - 1
+    if arr[i + 1] < arr[i]
+      pivot = i + 1
+     #puts "pivot = #{pivot}"
+    end
+  end
+  #arr is not rotated
+  if (pivot == -1)
+    binary_search_recursive(arr, key, min, max)
+  else
+    if (arr[pivot] == key)
+      return pivot
+    else
+    #split to two sub arrays and find which one contains key
+    #search second array
+      if key < arr[0]
+        #puts "< pivot"
+        return binary_search_recursive(arr, key, pivot + 1, max)
+      else #search first sub array
+        #puts "> pivot"
+        return binary_search_recursive(arr, key, min, pivot - 1)
+      end
+    end
+  end
+end
+=begin
+rotated_arr = [5,7,9,1,3]
+rotated_arr2 = [6,7,8,9,1,2,3,4,5]
+
+assert_equal(2, binary_search_rotated(rotated_arr, 9, 0, rotated_arr.length - 1))
+assert_equal(6, binary_search_rotated(rotated_arr2, 3, 0, rotated_arr2.length - 1))
+assert_equal(8, binary_search_rotated(rotated_arr2, 5, 0, rotated_arr2.length - 1))
+assert_equal(4, binary_search_rotated(rotated_arr2, 1, 0, rotated_arr2.length - 1))
+assert_equal(1, binary_search_rotated(rotated_arr2, 7, 0, rotated_arr2.length - 1))
+assert_equal(0, binary_search_rotated(rotated_arr2, 6, 0, rotated_arr2.length - 1))
+=end
+=begin
+def exp(base, exp)
+  if (exp == 0)
+    return 1
+  end
+  x = 1
+  exp.times {
+    x *= base
+  }
+  return x
+end
+
+def multiply_without_operator(x, y)
+  if x == 0 || y == 0
+    return 0
+  end
+  answer = 0
+  x.times {
+    answer += y
+  }
+  return answer 
+end
+
+puts multiply_without_operator(1234, 2345)
+puts 1234 * 2345
+=end
+
 
