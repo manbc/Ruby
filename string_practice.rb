@@ -122,7 +122,4 @@ end
 puts is_num?("a")
 puts is_num?("9")
 =end
-def string_permutations
-
-end
 
